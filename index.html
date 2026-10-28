@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#12243e">
+  <title>PTSLT — Production Support Quest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" data-page="home">
+        <span class="brand-mark"><i data-lucide="settings-2"></i></span>
+        <span><strong>PTSLT</strong><small>Production Test Support<br>& Loss Time Tracking</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="home"><i data-lucide="house"></i><span>Dashboard</span></button>
+        <button class="nav-item" data-action="report"><i data-lucide="siren"></i><span>Report Incident</span><b class="nav-plus">+</b></button>
+        <button class="nav-item" data-page="incidents"><i data-lucide="layout-dashboard"></i><span>Incident Board</span></button>
+        <button class="nav-item" data-page="tasks"><i data-lucide="list-checks"></i><span>My Tasks</span><span class="nav-count" id="task-count">3</span></button>
+        <button class="nav-item" data-page="analytics"><i data-lucide="chart-no-axes-combined"></i><span>Analytics</span></button>
+        <button class="nav-item" data-page="quests"><i data-lucide="trophy"></i><span>Quest & Rewards</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-profile">
+          <div class="mini-avatar">🧑🏻‍🔧</div>
+          <div class="mini-copy"><strong>Engineer Helper</strong><small>Level 2 · Test Engineer</small></div>
+          <span class="online-dot"></span>
+        </div>
+        <div class="side-xp"><div class="xp-label"><span>LEVEL 2</span><b><span id="side-xp">320</span> / 600 XP</b></div><div class="progress"><span id="side-xp-bar" style="width:53%"></span></div></div>
+        <div class="demo-note"><i data-lucide="flask-conical"></i> Demo mode · Sample data</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="mobile-menu" aria-label="Open menu"><i data-lucide="menu"></i></button>
+        <div class="breadcrumbs"><span>Workspace</span><i data-lucide="chevron-right"></i><strong id="page-heading">Dashboard</strong></div>
+        <div class="top-actions">
+          <span class="demo-pill"><span></span> PROTOTYPE</span>
+          <button class="icon-button notification-button" id="notifications-button" aria-label="Notifications"><i data-lucide="bell"></i><b>3</b></button>
+          <button class="user-menu" id="user-menu"><span class="avatar">🧑🏻‍🔧</span><span class="user-text"><strong>Somchai Jai Dee</strong><small>Line Leader</small></span><i data-lucide="chevron-down"></i></button>
+        </div>
+      </header>
+
+      <div class="content-wrap">
+        <section class="welcome-banner">
+          <div class="welcome-art"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="mascot">👨🏻‍🔧</div><span class="spark spark-one">✦</span><span class="spark spark-two">✧</span></div>
+          <div class="welcome-copy">
+            <div class="eyebrow"><span class="live-dot"></span> YOUR FACTORY SUPPORT HUB</div>
+            <h1>สวัสดีครับ คุณสมชาย <span class="wave">👋</span></h1>
+            <p>ช่วยกันแก้ปัญหาให้ไลน์กลับมาผลิตได้เร็วขึ้น!</p>
+            <div class="level-row"><span class="level-badge">LV. 2</span><strong>Engineer Helper</strong><div class="level-track"><span id="hero-xp-bar" style="width:53%"></span></div><small><b id="hero-xp">320</b> / 600 XP</small></div>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><span class="stat-emoji gold">✦</span><div><strong id="hero-total-xp">320</strong><small>Total XP</small></div></div>
+            <div class="hero-stat"><span class="stat-emoji coin">◉</span><div><strong id="hero-points">1,250</strong><small>Points</small></div></div>
+            <div class="hero-stat"><span class="stat-emoji medal">✹</span><div><strong id="hero-badges">3</strong><small>Badges</small></div></div>
+          </div>
+        </section>
+
+        <section class="page-view" id="home-view">
+          <div class="metric-grid">
+            <article class="metric-card metric-red"><div class="metric-icon"><i data-lucide="alert-triangle"></i></div><div><span>Open Incidents</span><strong id="metric-open">5</strong><small class="trend bad">+2 today</small></div><div class="metric-corner">!</div></article>
+            <article class="metric-card metric-blue"><div class="metric-icon"><i data-lucide="clock-3"></i></div><div><span>Avg. Response Time</span><strong>18 <em>min</em></strong><small class="trend good">↓ 32% <span>vs last week</span></small></div><div class="metric-corner"><i data-lucide="timer"></i></div></article>
+            <article class="metric-card metric-green"><div class="metric-icon"><i data-lucide="check-circle-2"></i></div><div><span>Avg. Recovery Time</span><strong>2.4 <em>hr</em></strong><small class="trend good">↓ 45% <span>vs last week</span></small></div><div class="metric-corner"><i data-lucide="activity"></i></div></article>
+            <article class="metric-card metric-purple"><div class="metric-icon"><i data-lucide="chart-no-axes-combined"></i></div><div><span>Total Loss Time</span><strong>12.8 <em>hr</em></strong><small class="trend good">↓ 28% <span>vs last week</span></small></div><div class="metric-corner"><i data-lucide="trending-down"></i></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="left-stack">
+              <section class="panel incidents-panel">
+                <div class="panel-heading"><div class="heading-title"><span class="heading-icon blue-icon"><i data-lucide="boxes"></i></span><div><h2>Recent Incidents <small>รายการปัญหาล่าสุด</small></h2></div></div><button class="text-button" data-page="incidents">View all <i data-lucide="arrow-up-right"></i></button></div>
+                <div class="table-tools"><div class="search-box"><i data-lucide="search"></i><input id="incident-search" type="search" placeholder="Search ID, station, issue..."></div><button class="filter-button" id="filter-button"><i data-lucide="list-filter"></i> All status <i data-lucide="chevron-down"></i></button></div>
+                <div class="incident-table-wrap">
+                  <table class="incident-table">
+                    <thead><tr><th>INCIDENT</th><th>LINE / MODEL</th><th>STATION</th><th>ISSUE</th><th>TEAM</th><th>STATUS</th><th>REPORTED</th><th></th></tr></thead>
+                    <tbody id="incident-rows"></tbody>
+                  </table>
+                </div>
+                <div class="table-footer"><span id="table-count">Showing 5 sample incidents</span><button class="small-link" data-page="incidents">Open incident board <i data-lucide="arrow-right"></i></button></div>
+              </section>
+
+              <div class="lower-grid">
+                <section class="panel chart-panel">
+                  <div class="panel-heading"><div class="heading-title"><span class="heading-icon cyan-icon"><i data-lucide="chart-no-axes-column-increasing"></i></span><div><h2>Loss Time Trend <small>สถิติการเสียเวลาจากปัญหา</small></h2></div></div><button class="select-chip" id="chart-range">Last 7 days <i data-lucide="chevron-down"></i></button></div>
+                  <div class="chart-legend"><span><i class="legend-dot dot-te"></i>TE</span><span><i class="legend-dot dot-pe"></i>PE</span><span><i class="legend-dot dot-ae"></i>AE</span><span><i class="legend-dot dot-me"></i>ME</span></div>
+                  <div class="bar-chart" aria-label="Sample loss time chart">
+                    <div class="y-axis"><span>16h</span><span>12h</span><span>8h</span><span>4h</span><span>0h</span></div>
+                    <div class="chart-plot"><div class="gridline g1"></div><div class="gridline g2"></div><div class="gridline g3"></div><div class="gridline g4"></div>
+                      <div class="bar-column"><div class="bar" style="height:60%"><i class="te" style="height:45%"></i><i class="pe" style="height:20%"></i><i class="ae" style="height:20%"></i><i class="me" style="height:15%"></i></div><small>22 Oct</small></div>
+                      <div class="bar-column"><div class="bar" style="height:68%"><i class="te" style="height:38%"></i><i class="pe" style="height:28%"></i><i class="ae" style="height:16%"></i><i class="me" style="height:18%"></i></div><small>23 Oct</small></div>
+                      <div class="bar-column"><div class="bar" style="height:35%"><i class="te" style="height:48%"></i><i class="pe" style="height:18%"></i><i class="ae" style="height:18%"></i><i class="me" style="height:16%"></i></div><small>24 Oct</small></div>
+                      <div class="bar-column"><div class="bar" style="height:52%"><i class="te" style="height:42%"></i><i class="pe" style="height:23%"></i><i class="ae" style="height:18%"></i><i class="me" style="height:17%"></i></div><small>25 Oct</small></div>
+                      <div class="bar-column"><div class="bar" style="height:49%"><i class="te" style="height:39%"></i><i class="pe" style="height:22%"></i><i class="ae" style="height:20%"></i><i class="me" style="height:19%"></i></div><small>26 Oct</small></div>
+                      <div class="bar-column"><div class="bar" style="height:76%"><i class="te" style="height:44%"></i><i class="pe" style="height:23%"></i><i class="ae" style="height:18%"></i><i class="me" style="height:15%"></i></div><small>27 Oct</small></div>
+                      <div class="bar-column today"><div class="bar" style="height:90%"><i class="te" style="height:40%"></i><i class="pe" style="height:24%"></i><i class="ae" style="height:19%"></i><i class="me" style="height:17%"></i></div><small>28 Oct</small></div>
+                    </div>
+                  </div>
+                  <div class="chart-footnote"><span><i data-lucide="info"></i> Sample data for presentation only</span><strong>12.8 hr <small>total loss time</small></strong></div>
+                </section>
+
+                <section class="panel station-panel">
+                  <div class="panel-heading"><div class="heading-title"><span class="heading-icon purple-icon"><i data-lucide="target"></i></span><div><h2>Top Failing Stations <small>จุดที่พบปัญหาบ่อย</small></h2></div></div><button class="dots-button" aria-label="More options">···</button></div>
+                  <div class="donut-area"><div class="donut"><div><strong>24</strong><small>incidents</small></div></div><div class="donut-legend"><div><i class="legend-dot dot-blue"></i><span>I2C1</span><b>8 <small>33%</small></b></div><div><i class="legend-dot dot-red"></i><span>HIPOT</span><b>5 <small>21%</small></b></div><div><i class="legend-dot dot-orange"></i><span>Final Test</span><b>4 <small>17%</small></b></div><div><i class="legend-dot dot-green"></i><span>Flash</span><b>4 <small>17%</small></b></div><div><i class="legend-dot dot-gray"></i><span>Others</span><b>3 <small>12%</small></b></div></div></div>
+                  <div class="insight-box"><i data-lucide="lightbulb"></i><span><b>Quick insight</b><small>I2C1 accounts for the largest share of sample incidents.</small></span></div>
+                </section>
+              </div>
+            </div>
+
+            <aside class="right-stack">
+              <section class="panel quest-panel">
+                <div class="panel-heading"><div class="heading-title"><span class="heading-icon gold-icon"><i data-lucide="trophy"></i></span><div><h2>Daily Quests <small>ภารกิจประจำวัน</small></h2></div></div><span class="reset-timer"><i data-lucide="timer"></i> Resets in 12h</span></div>
+                <div class="quest-list" id="quest-list">
+                  <article class="quest-item"><div class="quest-icon quest-blue"><i data-lucide="clipboard-list"></i></div><div class="quest-body"><div class="quest-title">Report 3 incidents</div><p>Create 3 incident reports today</p><div class="quest-progress"><span style="width:66%"></span></div><small>2 / 3 complete</small></div><div class="quest-reward">✦ <b>+100</b><small>XP</small></div></article>
+                  <article class="quest-item"><div class="quest-icon quest-indigo"><i data-lucide="users"></i></div><div class="quest-body"><div class="quest-title">Call the right team</div><p>Assign TE / PE / AE / ME 2 times</p><div class="quest-progress"><span style="width:50%"></span></div><small>1 / 2 complete</small></div><div class="quest-reward">✦ <b>+100</b><small>XP</small></div></article>
+                  <article class="quest-item"><div class="quest-icon quest-teal"><i data-lucide="wrench"></i></div><div class="quest-body"><div class="quest-title">Record root cause</div><p>Add root cause and corrective action</p><div class="quest-progress"><span style="width:50%"></span></div><small>1 / 2 complete</small></div><div class="quest-reward">✦ <b>+150</b><small>XP</small></div></article>
+                  <article class="quest-item"><div class="quest-icon quest-purple"><i data-lucide="check-check"></i></div><div class="quest-body"><div class="quest-title">Close the loop</div><p>Resolve 1 incident with a clear note</p><div class="quest-progress"><span style="width:0%"></span></div><small>0 / 1 complete</small></div><div class="quest-reward">✦ <b>+200</b><small>XP</small></div></article>
+                </div>
+                <button class="quest-all-button" data-page="quests">View all quests <i data-lucide="arrow-right"></i></button>
+              </section>
+              <section class="panel activity-panel">
+                <div class="panel-heading"><div class="heading-title"><span class="heading-icon orange-icon"><i data-lucide="zap"></i></span><div><h2>Recent Activity <small>ความเคลื่อนไหวล่าสุด</small></h2></div></div><button class="dots-button" aria-label="More options">···</button></div>
+                <div class="activity-list" id="activity-list">
+                  <div class="activity-item"><span class="activity-avatar av-blue">🧑🏻‍🔧</span><div><b>Somchai Jai Dee</b><p>Created INC-20261028-001</p><small>10:24 AM · just now</small></div></div>
+                  <div class="activity-item"><span class="activity-avatar av-purple">👩🏻‍🔬</span><div><b>Kanokwan S. <span>(TE)</span></b><p>Acknowledged INC-20261028-002</p><small>09:18 AM · 1h ago</small></div></div>
+                  <div class="activity-item"><span class="activity-avatar av-green">👨🏻‍💻</span><div><b>Thanakorn P. <span>(PE)</span></b><p>Updated status to In Progress</p><small>09:45 AM · 2h ago</small></div></div>
+                  <div class="activity-item"><span class="activity-avatar av-orange">👩🏻‍🔧</span><div><b>Patchara K. <span>(AE)</span></b><p>Added a root-cause note</p><small>08:52 AM · 2h ago</small></div></div>
+                </div>
+                <button class="activity-more" id="activity-more">Show activity feed <i data-lucide="arrow-right"></i></button>
+              </section>
+            </aside>
+          </div>
+          <section class="bottom-banner"><div class="banner-trophy">🏆</div><div><strong>Every fix earns progress.</strong><p>ทำงานเป็นทีม ลด Loss Time และปลดล็อกความสำเร็จใหม่ไปด้วยกัน</p></div><button class="banner-button" data-page="quests">Explore quests <i data-lucide="arrow-right"></i></button><div class="banner-shapes"></div></section>
+        </section>
+
+        <section class="page-view hidden" id="incidents-view">
+          <div class="page-title-row"><div><div class="eyebrow dark-eyebrow">LIVE SUPPORT BOARD</div><h1>Incident Board</h1><p>Track production issues from report to resolution.</p></div><button class="primary-button" data-action="report"><i data-lucide="plus"></i> Report incident</button></div>
+          <div class="board-summary" id="board-summary"></div>
+          <section class="panel board-panel"><div class="panel-heading"><div class="heading-title"><span class="heading-icon blue-icon"><i data-lucide="layers"></i></span><div><h2>All incidents <small>Sample incidents — demo only</small></h2></div></div><div class="board-controls"><select id="board-status"><option value="all">All statuses</option><option value="Open">Open</option><option value="Acknowledged">Acknowledged</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option></select><select id="board-team"><option value="all">All teams</option><option>TE</option><option>PE</option><option>AE</option><option>ME</option></select></div></div><div class="incident-card-list" id="incident-card-list"></div></section>
+        </section>
+
+        <section class="page-view hidden" id="tasks-view">
+          <div class="page-title-row"><div><div class="eyebrow dark-eyebrow">YOUR QUEUE</div><h1>My Tasks</h1><p>Pick up a case, acknowledge the call, and keep production moving.</p></div><span class="profile-level-chip"><i data-lucide="shield-check"></i> Level 2 Engineer Helper</span></div>
+          <div class="task-cards" id="task-cards"></div>
+        </section>
+
+        <section class="page-view hidden" id="analytics-view">
+          <div class="page-title-row"><div><div class="eyebrow dark-eyebrow">DATA → ACTION</div><h1>Analytics</h1><p>Use trends to spot repeat failures and prioritize corrective actions.</p></div><span class="sample-label"><i data-lucide="flask-conical"></i> Sample metrics</span></div>
+          <div class="analytics-grid"><section class="panel analytics-big"><div class="panel-heading"><div class="heading-title"><span class="heading-icon cyan-icon"><i data-lucide="chart-no-axes-column-increasing"></i></span><div><h2>Loss time by team</h2><p>Illustrative hours over the last 7 days</p></div></div></div><div class="analytics-bars"><div><span>TE</span><div><i style="width:78%"></i></div><b>4.8 hr</b></div><div><span>PE</span><div><i style="width:55%"></i></div><b>3.4 hr</b></div><div><span>AE</span><div><i style="width:37%"></i></div><b>2.3 hr</b></div><div><span>ME</span><div><i style="width:36%"></i></div><b>2.3 hr</b></div></div></section><section class="panel repeat-panel"><div class="panel-heading"><div class="heading-title"><span class="heading-icon purple-icon"><i data-lucide="repeat-2"></i></span><div><h2>Repeat issue watchlist</h2><p>Example patterns for discussion</p></div></div></div><div class="watch-row"><span class="watch-icon">01</span><div><b>I2C1 · Calibration</b><small>Repeated after product moves between lines</small></div><span class="severity high">High</span></div><div class="watch-row"><span class="watch-icon">02</span><div><b>HIPOT · GB HIGH</b><small>Possible pin contact / wear condition</small></div><span class="severity medium">Med</span></div><div class="watch-row"><span class="watch-icon">03</span><div><b>Final Test · No Communication</b><small>Check cable and connector condition</small></div><span class="severity medium">Med</span></div></section></div>
+          <div class="callout-note"><i data-lucide="info"></i><div><b>Prototype note</b><p>All values and root-cause examples are mock data. Actual response time and line downtime definitions should be agreed with Production, TE, PE and IE before real deployment.</p></div></div>
+        </section>
+
+        <section class="page-view hidden" id="quests-view">
+          <div class="page-title-row"><div><div class="eyebrow dark-eyebrow">LEVEL UP YOUR IMPACT</div><h1>Quest & Rewards</h1><p>Turn good support habits into visible progress — without losing sight of production results.</p></div><div class="points-chip">◉ <strong id="quest-points">1,250</strong> points</div></div>
+          <div class="quest-hero"><div class="quest-hero-icon">🏆</div><div><span class="level-badge">CURRENT LEVEL · 2</span><h2>Engineer Helper</h2><p>Every well-documented fix helps the whole team learn faster.</p><div class="wide-progress"><span id="quest-xp-bar" style="width:53%"></span></div><small><b id="quest-xp">320</b> / 600 XP to Level 3</small></div><div class="next-level"><span>UP NEXT</span><strong>Root Cause Ranger</strong><span class="next-icon">🛡️</span></div></div>
+          <h2 class="section-heading">Daily quests <span>Reset every day in this demo</span></h2><div class="all-quests-grid" id="all-quests-grid"></div>
+          <h2 class="section-heading">Your badges <span>Achievements earned in the demo</span></h2><div class="badge-grid"><div class="badge-card earned"><span>⚡</span><b>Fast Responder</b><small>Respond quickly to a call</small><em>UNLOCKED</em></div><div class="badge-card earned"><span>🔎</span><b>Root Cause Seeker</b><small>Document the likely cause</small><em>UNLOCKED</em></div><div class="badge-card earned"><span>🤝</span><b>Team Player</b><small>Support cross-team work</small><em>UNLOCKED</em></div><div class="badge-card locked"><span>🛠️</span><b>Fix Master</b><small>Resolve 10 incidents</small><em>🔒 LOCKED</em></div><div class="badge-card locked"><span>📉</span><b>Loss Time Slayer</b><small>Reduce repeat downtime</small><em>🔒 LOCKED</em></div></div>
+        </section>
+      </div>
+      <footer class="footer"><span>PTSLT Prototype v0.1</span><span><i data-lucide="shield-check"></i> No database · No real notifications · Sample data only</span><span>Built for internal concept review</span></footer>
+    </main>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+
+  <dialog class="modal" id="report-modal">
+    <form id="report-form" method="dialog">
+      <div class="modal-head"><div><span class="eyebrow dark-eyebrow">NEW SUPPORT REQUEST</span><h2>Report an incident</h2><p>Describe the issue so the right support team can respond.</p></div><button type="button" class="icon-button modal-close" data-close="report-modal"><i data-lucide="x"></i></button></div>
+      <div class="form-grid">
+        <label>Production line <select name="line" required><option value="">Select line</option><option>Line A</option><option>Line B</option><option>Line C</option><option>Line D</option></select></label>
+        <label>Model <select name="model" required><option value="">Select model</option><option>TDPS800</option><option>TDPS900</option><option>TDPS1500</option><option>New Model / NPI</option></select></label>
+        <label>Failing station <select name="station" required><option value="">Select station</option><option>I2C1</option><option>I2C2</option><option>HIPOT</option><option>Final Test</option><option>Flash</option><option>Other</option></select></label>
+        <label>Support team <select name="team" required><option value="">Call team...</option><option>TE</option><option>PE</option><option>AE</option><option>ME</option></select></label>
+        <label class="full-width">Issue / fail message <input name="issue" required placeholder="e.g. Seq2 Turn On, GB HIGH, Calibration Fail"></label>
+        <label class="full-width">Production impact <select name="impact" required><option value="Line stopped">Line stopped — production blocked</option><option value="Reduced output">Reduced output</option><option value="Single unit">Single unit / no line stop</option></select></label>
+        <label class="full-width">Initial details <textarea name="details" rows="3" placeholder="What happened? Any checks already performed?"></textarea></label>
+      </div>
+      <div class="modal-note"><i data-lucide="info"></i> Demo only: submitting creates a sample incident in this browser session. No engineer is actually notified.</div>
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="report-modal">Cancel</button><button type="submit" class="primary-button"><i data-lucide="send"></i> Create incident <span>+25 XP</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog class="modal detail-modal" id="detail-modal">
+    <div class="modal-head"><div><span class="eyebrow dark-eyebrow">INCIDENT DETAILS</span><h2 id="detail-title">Incident</h2><p id="detail-subtitle">Sample incident details</p></div><button type="button" class="icon-button modal-close" data-close="detail-modal"><i data-lucide="x"></i></button></div>
+    <div id="detail-content"></div>
+    <div class="modal-actions" id="detail-actions"></div>
+  </dialog>
+
+  <dialog class="modal small-modal" id="notifications-modal">
+    <div class="modal-head"><div><span class="eyebrow dark-eyebrow">ACTIVITY CENTER</span><h2>Notifications</h2><p>Prototype notifications only.</p></div><button type="button" class="icon-button modal-close" data-close="notifications-modal"><i data-lucide="x"></i></button></div>
+    <div class="notification-list"><div class="notification-row"><span class="notification-icon blue-icon"><i data-lucide="bell-ring"></i></span><div><b>New support request assigned to TE</b><p>INC-20261028-001 · I2C1 Calibration Fail</p><small>10:24 AM</small></div></div><div class="notification-row"><span class="notification-icon green-icon"><i data-lucide="check-circle-2"></i></span><div><b>Incident update</b><p>INC-20261028-003 was marked resolved.</p><small>09:45 AM</small></div></div><div class="notification-row"><span class="notification-icon orange-icon"><i data-lucide="message-circle"></i></span><div><b>Reminder preview</b><p>In the future, an unacknowledged call could trigger a reminder.</p><small>Demo concept</small></div></div></div>
+    <div class="modal-actions"><button class="primary-button" data-close="notifications-modal">Got it</button></div>
+  </dialog>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
