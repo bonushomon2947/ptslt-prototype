@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PTSLT — Production Test Support & Loss Time Tracking</title>
+<style>
+:root{--navy:#13243a;--blue:#2563eb;--bg:#f3f6fb;--card:#fff;--muted:#64748b;--line:#e2e8f0;--green:#16845b;--amber:#b7791f;--red:#c2413a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#172033;font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--navy);color:#fff;padding:20px 26px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+h1{font-size:21px;margin:0}header p{margin:4px 0 0;color:#cbd5e1}.tag{font-size:12px;border:1px solid #64748b;padding:5px 9px;border-radius:999px}
+nav{display:flex;gap:8px;padding:14px 26px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav button{border:0;background:#f1f5f9;color:#334155;padding:9px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+nav button.active{background:var(--blue);color:#fff}
+main{max-width:1400px;margin:auto;padding:22px;display:grid;gap:18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card,.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px;box-shadow:0 2px 8px #0f172a08}
+.stat-label{color:var(--muted);font-size:12px}.stat-value{font-size:28px;font-weight:750;margin-top:5px}.stat-note{font-size:12px;color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(300px,0.85fr) minmax(0,1.5fr);gap:18px;align-items:start}
+h2{font-size:17px;margin:0 0 14px}h3{font-size:14px;margin:0 0 8px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-size:12px;font-weight:650;color:#475569}
+input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:10px;background:#fff;font:inherit;color:#172033}textarea{min-height:72px;resize:vertical}
+button.primary{border:0;background:var(--blue);color:white;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
+button.secondary{border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:8px;padding:8px 11px;cursor:pointer}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.full{grid-column:1/-1}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters>*{flex:1;min-width:130px}
+table{width:100%;border-collapse:collapse;min-width:760px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;text-transform:uppercase;color:var(--muted);background:#f8fafc}td{font-size:12px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+.pill{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap}.Open{background:#fee2e2;color:#991b1b}.InProgress{background:#dbeafe;color:#1d4ed8}.Monitoring{background:#fef3c7;color:#92400e}.Closed{background:#dcfce7;color:#166534}.Cancelled{background:#e2e8f0;color:#475569}
+.muted{color:var(--muted)}.small{font-size:12px}.hidden{display:none!important}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.detail-box{background:#f8fafc;padding:10px;border-radius:8px}.detail-box strong{display:block;font-size:17px}
+.notice{padding:11px 13px;background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;color:#9a3412;font-size:12px}
+.empty{padding:26px;text-align:center;color:var(--muted)}.barrow{display:grid;grid-template-columns:130px 1fr 55px;gap:10px;align-items:center;margin:10px 0;font-size:12px}.bar{height:10px;background:#e2e8f0;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;background:#3b82f6;border-radius:99px}
+footer{padding:0 22px 26px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:14px}header{padding:18px}nav{padding:12px 14px}.detail-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){form{grid-template-columns:1fr}.field.full{grid-column:auto}.stats{grid-template-columns:1fr 1fr}.stat-value{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>PTSLT <span style="font-weight:400">| Production Test Support</span></h1><p>Incident Tracking · Loss Time · Root Cause Analysis</p></div>
+  <span class="tag">PILOT PROTOTYPE · LOCAL DEMO</span>
+</header>
+<nav>
+  <button class="active" data-view="overview">Overview</button>
+  <button data-view="incidents">Incident Board</button>
+  <button data-view="analytics">Failure Analysis</button>
+</nav>
+<main>
+  <section class="stats">
+    <div class="card"><div class="stat-label">Open Incidents</div><div class="stat-value" id="statOpen">0</div><div class="stat-note">Open + In Progress + Monitoring</div></div>
+    <div class="card"><div class="stat-label">Line Downtime (minutes)</div><div class="stat-value" id="statDown">0</div><div class="stat-note">Confirmed downtime only</div></div>
+    <div class="card"><div class="stat-label">Average Response (minutes)</div><div class="stat-value" id="statResponse">—</div><div class="stat-note">Created to first response</div></div>
+    <div class="card"><div class="stat-label">Repeat / Total Failures</div><div class="stat-value" id="statRepeat">0 / 0</div><div class="stat-note">Same station + category</div></div>
+  </section>
+  <section id="view-overview" class="layout">
+    <div class="panel">
+      <h2>Report New Incident</h2>
+      <div class="notice" style="margin-bottom:14px">Demo only: ข้อมูลบันทึกใน browser เครื่องนี้ ยังไม่ส่ง Teams และยังไม่ใช่ฐานข้อมูลส่วนกลาง ห้ามใส่ข้อมูลลับของโรงงานในเวอร์ชันทดลองนี้</div>
+      <form id="incidentForm">
+        <div class="field"><label for="line">Line *</label><input id="line" required placeholder="เช่น Line A"></div>
+        <div class="field"><label for="model">Model *</label><input id="model" required placeholder="เช่น TDPS800"></div>
+        <div class="field"><label for="station">Fail Station *</label><input id="station" required placeholder="เช่น I2C1"></div>
+        <div class="field"><label for="team">Support Team *</label><select id="team" required><option value="TE">TE</option><option value="PE">PE</option><option value="AE">AE</option><option value="ME">ME</option><option value="TE+PE">TE + PE</option><option value="Multiple">Multiple teams</option></select></div>
+        <div class="field"><label for="category">Failure Category *</label><select id="category" required><option>Calibration</option><option>Test Equipment / Fixture / Pin</option><option>Cable / Connection</option><option>Firmware / Software</option><option>Test Program / Sequence</option><option>Power / Electrical</option><option>Product-related</option><option>Other / Unknown</option></select></div>
+        <div class="field"><label for="severity">Priority *</label><select id="severity"><option>High — Line stopped</option><option>Medium — Output affected</option><option>Low — No line stop</option></select></div>
+        <div class="field full"><label for="symptom">Failure symptom / Error code *</label><textarea id="symptom" required placeholder="เช่น CN HOLD on adj verify test; Seq2 Turn On Fail"></textarea></div>
+        <div class="field"><label for="startTime">Line stop start time (ถ้าไลน์หยุด)</label><input id="startTime" type="datetime-local"></div>
+        <div class="field"><label for="reporter">Reporter / Line Leader *</label><input id="reporter" required placeholder="ชื่อหรือรหัสตามนโยบายบริษัท"></div>
+        <div class="field full"><label for="note">Additional notes</label><textarea id="note" placeholder="สิ่งที่ตรวจสอบแล้ว / ข้อมูลเพิ่มเติม"></textarea></div>
+        <div class="field full actions"><button class="primary" type="submit">＋ Create Incident</button><button class="secondary" type="button" id="seedBtn">Load demo data</button><button class="secondary" type="reset">Clear form</button></div>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>Recent Incidents</h2>
+      <div id="recentList"></div>
+      <div style="margin-top:15px"><button class="secondary" data-goto="incidents">View all incidents →</button></div>
+    </div>
+  </section>
+  <section id="view-incidents" class="panel hidden">
+    <h2>Incident Board</h2>
+    <div class="filters">
+      <input id="searchBox" placeholder="ค้นหา ID / Line / Model / Station / Symptom">
+      <select id="statusFilter"><option value="">All statuses</option><option>Open</option><option>In Progress</option><option>Monitoring</option><option>Closed</option><option>Cancelled</option></select>
+      <select id="teamFilter"><option value="">All teams</option><option>TE</option><option>PE</option><option>AE</option><option>ME</option><option>TE+PE</option><option>Multiple</option></select>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Incident / Created</th><th>Line / Model</th><th>Station / Symptom</th><th>Team / Status</th><th>Downtime</th><th>Action</th></tr></thead><tbody id="incidentRows"></tbody></table></div>
+  </section>
+  <section id="view-analytics" class="panel hidden">
+    <h2>Failure Analysis</h2>
+    <p class="muted small">ตัวเลขจากข้อมูลที่บันทึกใน Demo เท่านั้น ควรมีข้อมูลหลายสัปดาห์และตรวจสอบความถูกต้องก่อนใช้ตัดสินใจจริง</p>
+    <div class="detail-grid" id="analysisSummary"></div>
+    <h3 style="margin-top:22px">Failures by Station</h3><div id="stationBars"></div>
+    <h3 style="margin-top:22px">Failures by Root Cause / Category</h3><div id="categoryBars"></div>
+    <h3 style="margin-top:22px">Highest Downtime Incidents</h3><div class="table-wrap"><table><thead><tr><th>ID</th><th>Station</th><th>Root Cause</th><th>Downtime (min)</th></tr></thead><tbody id="downtimeRows"></tbody></table></div>
+  </section>
+  <section id="detailPanel" class="panel hidden">
+    <div style="display:flex;justify-content:space-between;gap:12px;align-items:start;flex-wrap:wrap"><div><h2 id="detailTitle">Incident Detail</h2><div class="muted small" id="detailMeta"></div></div><button class="secondary" id="closeDetail">Close detail</button></div>
+    <div class="detail-grid" id="detailTimes" style="margin:15px 0"></div>
+    <form id="updateForm">
+      <input id="editId" type="hidden">
+      <div class="field"><label for="owner">Assigned engineer / owner</label><input id="owner" placeholder="ชื่อผู้รับผิดชอบ"></div>
+      <div class="field"><label for="status">Status</label><select id="status"><option>Open</option><option>In Progress</option><option>Monitoring</option><option>Closed</option><option>Cancelled</option></select></div>
+      <div class="field"><label for="responseTime">First response time</label><input id="responseTime" type="datetime-local"></div>
+      <div class="field"><label for="recoveryTime">Ready for production time</label><input id="recoveryTime" type="datetime-local"></div>
+      <div class="field"><label for="restartTime">Production resumed time</label><input id="restartTime" type="datetime-local"></div>
+      <div class="field"><label for="rootCause">Root Cause</label><select id="rootCause"><option value="">Select when known</option><option>Calibration incorrect / missing</option><option>Pin / Fixture damaged</option><option>Cable / Connection damaged</option><option>Firmware mismatch</option><option>Test program / Sequence</option><option>Power / Electrical issue</option><option>Product-related</option><option>Operator / Setup</option><option>Unknown — investigating</option><option>Other</option></select></div>
+      <div class="field full"><label for="actionText">Corrective Action / How was it fixed?</label><textarea id="actionText" placeholder="เช่น Recalibrated station and verified with good sample"></textarea></div>
+      <div class="field full"><label for="verification">Verification / Follow-up</label><textarea id="verification" placeholder="เช่น Production confirmed first-pass test OK; monitor next run"></textarea></div>
+      <div class="field full actions"><button class="primary" type="submit">Save update</button><button class="secondary" type="button" id="closeIncident">Close incident now</button></div>
+    </form>
+    <div style="margin-top:18px"><h3>Audit Timeline</h3><div id="timeline"></div></div>
+  </section>
+</main>
+<footer>PTSLT prototype v0.1 · Browser-local demo only · Production deployment requires IT approval, authentication, centralized database, backups and access control.</footer>
+<script>
+const KEY='ptslt_demo_incidents_v1';
+let incidents=[];
+try{incidents=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){incidents=[]}
+const $=id=>document.getElementById(id);
+const nowLocal=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
+const isoNow=()=>new Date().toISOString();
+const dt=v=>v?new Date(v).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'—';
+const mins=(a,b)=>a&&b?Math.max(0,Math.round((new Date(b)-new Date(a))/60000)):null;
+const duration=(i)=>mins(i.lineStopStart,i.productionResumedAt);
+const openStatuses=['Open','In Progress','Monitoring'];
+function save(){localStorage.setItem(KEY,JSON.stringify(incidents));render()}
+function nextId(){const d=new Date(),stamp=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');const n=incidents.filter(x=>x.id.includes(stamp)).length+1;return `INC-${stamp}-${String(n).padStart(3,'0')}`}
+function log(i,msg){i.events=i.events||[];i.events.unshift({at:isoNow(),msg})}
+function pill(s){return `<span class="pill ${s.replaceAll(' ','')}">${s}</span>`}
+function cardIncident(i){return `<div class="detail-box" style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;gap:8px"><strong style="font-size:13px">${i.id}</strong>${pill(i.status)}</div><div style="margin-top:5px"><b>${esc(i.line)} · ${esc(i.station)}</b> — ${esc(i.model)}</div><div class="small muted">${esc(i.symptom)}</div><div class="small muted">Team: ${esc(i.team)} · ${dt(i.createdAt)}</div><div style="margin-top:8px"><button class="secondary" onclick="openDetail('${i.id}')">Open case</button></div></div>`}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){
+ $('statOpen').textContent=incidents.filter(i=>openStatuses.includes(i.status)).length;
+ const ds=incidents.map(duration).filter(v=>v!==null);$('statDown').textContent=ds.reduce((a,b)=>a+b,0);
+ const rs=incidents.map(i=>mins(i.createdAt,i.firstResponseAt)).filter(v=>v!==null);$('statResponse').textContent=rs.length?(rs.reduce((a,b)=>a+b,0)/rs.length).toFixed(1):'—';
+ const keys=incidents.map(i=>`${i.station.toLowerCase()}|${i.category}`);const repeats=keys.length-new Set(keys).size;$('statRepeat').textContent=`${repeats} / ${incidents.length}`;
+ $('recentList').innerHTML=incidents.length?incidents.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,4).map(cardIncident).join(''):'<div class="empty">ยังไม่มี Incident — สร้างรายการแรกจากแบบฟอร์มด้านซ้าย</div>';
+ const q=($('searchBox')?.value||'').toLowerCase(),sf=$('statusFilter')?.value||'',tf=$('teamFilter')?.value||'';
+ const filtered=incidents.filter(i=>(!q||[i.id,i.line,i.model,i.station,i.symptom,i.rootCause].join(' ').toLowerCase().includes(q))&&(!sf||i.status===sf)&&(!tf||i.team===tf)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+ $('incidentRows').innerHTML=filtered.length?filtered.map(i=>`<tr><td><b>${i.id}</b><br>${dt(i.createdAt)}<br><span class="muted">${esc(i.reporter)}</span></td><td>${esc(i.line)}<br>${esc(i.model)}</td><td><b>${esc(i.station)}</b><br>${esc(i.symptom)}<br><span class="muted">${esc(i.rootCause||i.category)}</span></td><td>${esc(i.team)}<br>${pill(i.status)}<br><span class="muted">${esc(i.owner||'Unassigned')}</span></td><td>${duration(i)===null?'—':duration(i)+' min'}</td><td><button class="secondary" onclick="openDetail('${i.id}')">Manage</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">No incidents found</td></tr>';
+ renderAnalytics();
+}
+function renderBars(target,counts){const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);if(!entries.length){$(target).innerHTML='<div class="empty">ยังไม่มีข้อมูล</div>';return}const max=Math.max(...entries.map(x=>x[1]));$(target).innerHTML=entries.slice(0,8).map(([name,n])=>`<div class="barrow"><span>${esc(name)}</span><div class="bar"><span style="width:${n/max*100}%"></span></div><b>${n}</b></div>`).join('')}
+function renderAnalytics(){
+ const byStation={},byCat={};incidents.forEach(i=>{byStation[i.station]=(byStation[i.station]||0)+1;const c=i.rootCause||i.category;byCat[c]=(byCat[c]||0)+1});
+ const total=incidents.length,closed=incidents.filter(i=>i.status==='Closed').length,downs=incidents.map(duration).filter(v=>v!==null);
+ $('analysisSummary').innerHTML=[['Total incidents',total],['Closed incidents',closed],['Recorded downtime',downs.reduce((a,b)=>a+b,0)+' min']].map(([k,v])=>`<div class="detail-box"><span class="muted small">${k}</span><strong>${v}</strong></div>`).join('');
+ renderBars('stationBars',byStation);renderBars('categoryBars',byCat);
+ const top=incidents.filter(i=>duration(i)!==null).sort((a,b)=>duration(b)-duration(a)).slice(0,8);
+ $('downtimeRows').innerHTML=top.length?top.map(i=>`<tr><td>${i.id}</td><td>${esc(i.station)}</td><td>${esc(i.rootCause||'Not identified')}</td><td><b>${duration(i)}</b></td></tr>`).join(''):'<tr><td colspan="4" class="empty">ยังไม่มีเคสที่บันทึกเวลา Production Resumed</td></tr>';
+}
+function openDetail(id){const i=incidents.find(x=>x.id===id);if(!i)return;$('detailPanel').classList.remove('hidden');$('detailTitle').textContent=i.id+' · '+i.station;$('detailMeta').textContent=`${i.line} / ${i.model} · ${i.symptom} · Reporter: ${i.reporter}`;
+ $('editId').value=i.id;$('owner').value=i.owner||'';$('status').value=i.status;$('responseTime').value=i.firstResponseAt?toLocal(i.firstResponseAt):'';$('recoveryTime').value=i.readyAt?toLocal(i.readyAt):'';$('restartTime').value=i.productionResumedAt?toLocal(i.productionResumedAt):'';$('rootCause').value=i.rootCause||'';$('actionText').value=i.correctiveAction||'';$('verification').value=i.verification||'';
+ $('detailTimes').innerHTML=[['Reported',dt(i.createdAt)],['Line stop start',dt(i.lineStopStart)],['First response',dt(i.firstResponseAt)],['Ready for production',dt(i.readyAt)],['Production resumed',dt(i.productionResumedAt)],['Calculated downtime',duration(i)===null?'Not confirmed':duration(i)+' min']].map(([k,v])=>`<div class="detail-box"><span class="muted small">${k}</span><strong style="font-size:14px">${v}</strong></div>`).join('');
+ $('timeline').innerHTML=(i.events||[]).map(e=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><b>${dt(e.at)}</b><div class="small">${esc(e.msg)}</div></div>`).join('')||'<div class="muted">No history</div>';
+ $('detailPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toLocal(v){const d=new Date(v);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+$('incidentForm').addEventListener('submit',e=>{e.preventDefault();const start=$('startTime').value?new Date($('startTime').value).toISOString():null;const i={id:nextId(),line:$('line').value.trim(),model:$('model').value.trim(),station:$('station').value.trim(),team:$('team').value,category:$('category').value,severity:$('severity').value,symptom:$('symptom').value.trim(),lineStopStart:start,reporter:$('reporter').value.trim(),notes:$('note').value.trim(),createdAt:isoNow(),status:'Open',owner:'',firstResponseAt:null,readyAt:null,productionResumedAt:null,rootCause:'',correctiveAction:'',verification:'',events:[]};log(i,'Incident created by '+i.reporter);incidents.unshift(i);save();e.target.reset();openDetail(i.id);});
+$('updateForm').addEventListener('submit',e=>{e.preventDefault();const i=incidents.find(x=>x.id===$('editId').value);if(!i)return;const old=i.status;i.owner=$('owner').value.trim();i.status=$('status').value;i.firstResponseAt=$('responseTime').value?new Date($('responseTime').value).toISOString():null;i.readyAt=$('recoveryTime').value?new Date($('recoveryTime').value).toISOString():null;i.productionResumedAt=$('restartTime').value?new Date($('restartTime').value).toISOString():null;i.rootCause=$('rootCause').value;i.correctiveAction=$('actionText').value.trim();i.verification=$('verification').value.trim();log(i,`Updated case: status ${old} → ${i.status}; owner ${i.owner||'unassigned'}`);save();openDetail(i.id);});
+$('closeIncident').addEventListener('click',()=>{const i=incidents.find(x=>x.id===$('editId').value);if(!i)return;if(!i.productionResumedAt&&!confirm('ยังไม่มี Production Resumed time ต้องการปิดเคสโดยไม่มีเวลานี้หรือไม่?'))return;i.status='Closed';log(i,'Incident closed manually');save();openDetail(i.id)});
+$('closeDetail').addEventListener('click',()=>$('detailPanel').classList.add('hidden'));
+['searchBox','statusFilter','teamFilter'].forEach(id=>$(id).addEventListener(id==='searchBox'?'input':'change',render));
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));['overview','incidents','analytics'].forEach(v=>$('view-'+v).classList.toggle('hidden',v!==b.dataset.view));$('detailPanel').classList.add('hidden')}));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>document.querySelector('[data-view="incidents"]').click()));
+$('seedBtn').addEventListener('click',()=>{if(incidents.length&&!confirm('เพิ่มข้อมูลตัวอย่างเข้าไปในรายการที่มีอยู่?'))return;const samples=[
+{line:'Line A',model:'TDPS800',station:'I2C1',team:'TE',category:'Calibration',severity:'High — Line stopped',symptom:'Iout test fail after calibration',rootCause:'Calibration incorrect / missing',correctiveAction:'Recalibrated I2C1 and verified using good sample',verification:'Passed verification; monitor next production run',status:'Closed',mins:32},
+{line:'Line B',model:'TDPS1500',station:'HIPOT',team:'TE+PE',category:'Test Equipment / Fixture / Pin',severity:'High — Line stopped',symptom:'GB HIGH during HIPOT test',rootCause:'Pin / Fixture damaged',correctiveAction:'Replaced worn pin and verified contact',verification:'Production confirmed pass',status:'Closed',mins:48},
+{line:'Line A',model:'TDPS800',station:'ATS1',team:'PE',category:'Power / Electrical',severity:'Medium — Output affected',symptom:'12V output not detected; intermittent fail',rootCause:'Unknown — investigating',correctiveAction:'Checking output path and comparing with known-good sample',verification:'Continue monitoring next run',status:'In Progress',mins:null},
+{line:'Line C',model:'New Model',station:'I2C1',team:'TE',category:'Firmware / Software',severity:'Medium — Output affected',symptom:'Firmware mismatch prevents test execution',rootCause:'Firmware mismatch',correctiveAction:'Pending approved firmware / ECN confirmation',verification:'Waiting for next approved sample',status:'Open',mins:null}
+];samples.forEach((s,n)=>{const created=new Date(Date.now()-(n+1)*3600000).toISOString();const start=s.mins?new Date(Date.now()-(n+1)*3600000).toISOString():null;const i={...s,id:nextId(),reporter:'Demo Line Leader',notes:'SAMPLE DATA — NOT REAL PRODUCTION RECORD',createdAt:created,lineStopStart:start,owner:s.team==='TE'?'Demo TE':'Demo Engineer',firstResponseAt:s.mins?new Date(new Date(start).getTime()+5*60000).toISOString():null,readyAt:s.mins?new Date(new Date(start).getTime()+(s.mins-4)*60000).toISOString():null,productionResumedAt:s.mins?new Date(new Date(start).getTime()+s.mins*60000).toISOString():null,events:[]};log(i,'Demo incident generated');incidents.unshift(i)});save()});
+render();
+</script>
+</body></html>
